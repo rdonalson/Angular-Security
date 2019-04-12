@@ -1,0 +1,14 @@
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\bin\Debug\netcoreapp2.1\PtcApi.deps.json
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\bin\Debug\netcoreapp2.1\PtcApi.runtimeconfig.json
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\bin\Debug\netcoreapp2.1\PtcApi.runtimeconfig.dev.json
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\bin\Debug\netcoreapp2.1\PtcApi.dll
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\bin\Debug\netcoreapp2.1\PtcApi.pdb
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.csprojAssemblyReference.cache
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.csproj.CoreCompileInputs.cache
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.RazorAssemblyInfo.cache
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.RazorAssemblyInfo.cs
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.AssemblyInfoInputs.cache
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.AssemblyInfo.cs
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.RazorTargetAssemblyInfo.cache
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.dll
+C:\Users\rickd\source\repos\Angular-Security\PtcApi\obj\Debug\netcoreapp2.1\PtcApi.pdb
