@@ -42,6 +42,7 @@
     ],
     "no-empty": false,
     // "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
+    "no-inferrable-types": [ false ],
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,

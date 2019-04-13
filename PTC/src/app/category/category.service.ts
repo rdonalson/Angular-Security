@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Category } from './category';
 
-const API_URL = "http://localhost:5000/api/category/";
+const API_URL = 'http://localhost:5000/api/category/';
 
 @Injectable()
 export class CategoryService {
