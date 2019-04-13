@@ -5,11 +5,16 @@ import { ProductListComponent } from './product/product-list.component';
 import { CategoryListComponent } from './category/category-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductDetailComponent } from './product/product-detail.component';
+import { LoginComponent } from './security/login.component';
 
 const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   },
   {
     path: 'products',
