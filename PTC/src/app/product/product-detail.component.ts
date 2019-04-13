@@ -6,6 +6,8 @@ import { ProductService } from './product.service';
 import { Product } from './product';
 import { Category } from '../category/category';
 import { CategoryService } from '../category/category.service';
+import { SecurityService } from '../security/security.service';
+import { AppUserAuth } from '../security/app-user-auth';
 
 @Component({
   templateUrl: './product-detail.component.html'
@@ -14,11 +16,17 @@ export class ProductDetailComponent implements OnInit {
   product: Product;
   originalProduct: Product;
   categories: Category[];
+  securityObject: AppUserAuth = null;
 
-  constructor(private categoryService: CategoryService,
-              private productService: ProductService,
-              private route: ActivatedRoute,
-              private location: Location) { }
+  constructor(
+    private categoryService: CategoryService,
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private location: Location,
+    private securityService: SecurityService
+  ) {
+    this.securityObject = securityService.securityObject;
+  }
 
   ngOnInit() {
     this.getCategories();
@@ -34,11 +42,10 @@ export class ProductDetailComponent implements OnInit {
       this.initProduct();
     } else {
       // Get a product from product service
-      this.productService.getProduct(id)
-        .subscribe(product => {
-          this.product = product;
-          this.originalProduct = Object.assign({}, this.product);
-        });
+      this.productService.getProduct(id).subscribe(product => {
+        this.product = product;
+        this.originalProduct = Object.assign({}, this.product);
+      });
     }
   }
 
@@ -53,23 +60,30 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private getCategories(): void {
-    this.categoryService.getCategories()
-      .subscribe(categories => this.categories = categories);
+    this.categoryService
+      .getCategories()
+      .subscribe(categories => (this.categories = categories));
   }
 
   saveData(): void {
     if (this.product.productId) {
       // Update product
-      this.productService.updateProduct(this.product)
-        .subscribe(product => { this.product = product; },
-          () => null,
-          () => this.dataSaved());
+      this.productService.updateProduct(this.product).subscribe(
+        product => {
+          this.product = product;
+        },
+        () => null,
+        () => this.dataSaved()
+      );
     } else {
       // Add a product
-      this.productService.addProduct(this.product)
-        .subscribe(product => { this.product = product; },
-          () => null,
-          () => this.dataSaved());
+      this.productService.addProduct(this.product).subscribe(
+        product => {
+          this.product = product;
+        },
+        () => null,
+        () => this.dataSaved()
+      );
     }
   }
 

@@ -5,15 +5,24 @@
   <div class="panel-body">
     <div class="form-group">
       <label for="productName">Product Name</label>
-      <input id="productName" class="form-control" [(ngModel)]="product.productName" />
+      <input
+        id="productName"
+        class="form-control"
+        [(ngModel)]="product.productName"
+      />
     </div>
 
     <div class="form-group">
       <label for="introductionDate">
         Introduction Date
       </label>
-      <input id="introductionDate" class="form-control" [ngModel]="product.introductionDate | date:'yyyy-MM-dd'" (ngModelChange)="product.introductionDate = $event"
-        type="date" />
+      <input
+        id="introductionDate"
+        class="form-control"
+        [ngModel]="product.introductionDate | date: 'yyyy-MM-dd'"
+        (ngModelChange)="product.introductionDate = $event"
+        type="date"
+      />
     </div>
 
     <div class="form-group">
@@ -28,15 +37,29 @@
 
     <div class="form-group">
       <label for="categories">Category</label>
-      <select id="categories" name="categories" class="form-control" [(ngModel)]="product.categoryId">
-        <option *ngFor="let category of categories" value="{{category.categoryId}}">
-          {{category.categoryName}}
+      <select
+        id="categories"
+        name="categories"
+        class="form-control"
+        [(ngModel)]="product.categoryId"
+      >
+        <option
+          *ngFor="let category of categories"
+          value="{{ category.categoryId }}"
+        >
+          {{ category.categoryName }}
         </option>
       </select>
     </div>
-  </div> 
+  </div>
   <div class="panel-footer">
-    <button class="btn btn-primary" (click)="saveData()">Save</button>
+    <button
+      class="btn btn-primary"
+      (click)="saveData()"
+      *ngIf="securityObject.canSaveProduct"
+    >
+      Save
+    </button>
     <button class="btn btn-default" (click)="cancel()">Cancel</button>
   </div>
 </div>

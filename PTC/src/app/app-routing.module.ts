@@ -6,6 +6,7 @@ import { CategoryListComponent } from './category/category-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductDetailComponent } from './product/product-detail.component';
 import { LoginComponent } from './security/login.component';
+import { AuthGuard } from './security/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,21 +19,30 @@ const routes: Routes = [
   },
   {
     path: 'products',
-    component: ProductListComponent
+    component: ProductListComponent,
+    canActivate: [ AuthGuard ],
+    data: { claimType: 'canAccessProducts'}
   },
   {
     path: 'productDetail/:id',
-    component: ProductDetailComponent
+    component: ProductDetailComponent,
+    canActivate: [ AuthGuard ],
+    data: { claimType: 'canAccessProducts'}
   },
   {
     path: 'categories',
-    component: CategoryListComponent
+    component: CategoryListComponent,
+    canActivate: [ AuthGuard ],
+    data: { claimType: 'canAccessCategories'}
   },
   {
-    path: '', redirectTo: 'dashboard', pathMatch: 'full'
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full'
   },
   {
-    path: '**', component: DashboardComponent
+    path: '**',
+    component: DashboardComponent
   }
 ];
 
@@ -40,4 +50,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
