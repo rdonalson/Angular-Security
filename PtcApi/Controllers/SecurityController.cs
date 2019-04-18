@@ -10,15 +10,21 @@ namespace PtcApi.Controllers
 	[Route("api/[controller]")]
 	public class SecurityController : Controller
 	{
+		private readonly JwtSettings _settings;
+
+		public SecurityController(JwtSettings settings)
+		{
+			_settings = settings;
+		}
+
 		// GET: api/<controller>
 		[HttpPost("login")]
 		public IActionResult Login([FromBody] AppUser user)
 		{
 			IActionResult ret = null;
-			AppUserAuth auth = new AppUserAuth();
-			SecurityManager mgr = new SecurityManager();
+			SecurityManager mgr = new SecurityManager(_settings);
 
-			auth = mgr.ValidateUser(user);
+			AppUserAuth auth = mgr.ValidateUser(user);
 			ret = auth.IsAuthenticated
 				? StatusCode(StatusCodes.Status200OK, auth)
 				: StatusCode(StatusCodes.Status404NotFound, "Invalid User Name/Password");

@@ -9,7 +9,7 @@ namespace PtcApi.Model
         public DbSet<AppUser> Users { get; set; }
         public DbSet<AppUserClaim> Claims { get; set; }
 
-        private const string conn =
+        private const string Conn =
                       @"server=.\application;
                             database=ptc-pluralsight;
                             trusted_connection=true;
@@ -18,7 +18,7 @@ namespace PtcApi.Model
         protected override void OnConfiguring(
                     DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(conn);
+            optionsBuilder.UseSqlServer(Conn);
         }
     }
 }

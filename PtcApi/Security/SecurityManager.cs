@@ -1,12 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using PtcApi.Model;
 
 namespace PtcApi.Security
 {
 	public class SecurityManager
 	{
+		private readonly JwtSettings _settings;
+
+		public SecurityManager(JwtSettings settings)
+		{
+			_settings = settings;
+		}
+
 		public AppUserAuth ValidateUser(AppUser user)
 		{
 			AppUserAuth ret = new AppUserAuth();
@@ -42,18 +53,46 @@ namespace PtcApi.Security
 			return list;
 		}
 
+		protected string BuildJwtToken(AppUserAuth authUser)
+		{
+			SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
+			List<Claim> jwtClaims = new List<Claim>
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, authUser.UserName),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim("isAuthenticated", authUser.IsAuthenticated.ToString().ToLower()),
+				new Claim("CanAccessProducts", authUser.CanAccessProducts.ToString().ToLower()),
+				new Claim("CanAddProduct", authUser.CanAddProduct.ToString().ToLower()),
+				new Claim("CanSaveProduct", authUser.CanSaveProduct.ToString().ToLower()),
+				new Claim("CanAccessCategories", authUser.CanAccessCategories.ToString().ToLower()),
+				new Claim("CanAddCategory", authUser.CanAddCategory.ToString().ToLower())
+			};
+			// Create the JwtSecurityToken object
+			JwtSecurityToken token = new JwtSecurityToken(
+				_settings.Issuer,
+				_settings.Audience,
+				jwtClaims,
+				DateTime.UtcNow,
+				DateTime.UtcNow.AddMinutes(_settings.MinutesToExpiration),
+				new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+			);
+
+			// Create a string representation of the Jwt token
+			return new JwtSecurityTokenHandler().WriteToken(token);
+		}
+
 		private AppUserAuth BuildUserAuthObject(AppUser authUser)
 		{
-			AppUserAuth ret = new AppUserAuth();
-			var claims = new List<AppUserClaim>();
-
-			// Set User Properties
-			ret.UserName = authUser.UserName;
-			ret.IsAuthenticated = true;
-			ret.BearerToken = new Guid().ToString();
+			AppUserAuth ret = new AppUserAuth
+			{
+				// Set User Properties
+				UserName = authUser.UserName,
+				IsAuthenticated = true,
+				BearerToken = new Guid().ToString()
+			};
 
 			// Get all claims for the user
-			claims = GetUserClaims(authUser);
+			List<AppUserClaim> claims = GetUserClaims(authUser);
 
 			// Loop through all claims and
 			// set properties of user object
@@ -66,6 +105,7 @@ namespace PtcApi.Security
 				{
 				}
 
+			ret.BearerToken = BuildJwtToken(ret);
 			return ret;
 		}
 	}

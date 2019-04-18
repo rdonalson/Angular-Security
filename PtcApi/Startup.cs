@@ -1,100 +1,91 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using PtcApi.Model;
 
 namespace PtcApi
 {
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
 
-        private IConfiguration Configuration { get; }
+		private IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-						// Get JWT Token Settings from JwtSettings.json file
-						JwtSettings settings = new JwtSettings();
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			// Get JWT Token Settings from JwtSettings.json file
+			JwtSettings settings = GetJwtSettings();
 
-						// Create singleton of JwtSettings
-						services.AddSingleton<JwtSettings>(settings);
+			// Create singleton of JwtSettings
+			services.AddSingleton(settings);
 
-						// Register Jwt as the Authentication service
-						services.AddAuthentication(options =>
-						{
-							options.DefaultAuthenticateScheme = "JwtBearer";
-							options.DefaultChallengeScheme = "JwtBearer";
-						}).AddJwtBearer("JwtBearer", jwtBearerOptions =>
-						{
-							jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-							{
-								ValidateIssuerSigningKey = true,
-								IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key)),
-								ValidateIssuer = true,
-								ValidIssuer = settings.Issuer,
+			// Register Jwt as the Authentication service
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = "JwtBearer";
+				options.DefaultChallengeScheme = "JwtBearer";
+			}).AddJwtBearer("JwtBearer", jwtBearerOptions =>
+			{
+				jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key)),
+					ValidateIssuer = true,
+					ValidIssuer = settings.Issuer,
 
-								ValidateAudience = true,
-								ValidAudience = settings.Audience,
+					ValidateAudience = true,
+					ValidAudience = settings.Audience,
 
-								ValidateLifetime = true,
-								ClockSkew = TimeSpan.FromMinutes(settings.MinutesToExpiration)
-							};
-						});
-						
-            services.AddCors();
+					ValidateLifetime = true,
+					ClockSkew = TimeSpan.FromMinutes(settings.MinutesToExpiration)
+				};
+			});
 
-            services.AddMvc()
-            .AddJsonOptions(options =>
-              options.SerializerSettings.ContractResolver =
-            new CamelCasePropertyNamesContractResolver()).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-        }
+			services.AddCors();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // app.UseHsts();
-            }
+			services.AddMvc()
+				.AddJsonOptions(options =>
+					options.SerializerSettings.ContractResolver =
+						new CamelCasePropertyNamesContractResolver()).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+		}
 
-            app.UseCors(
-              options => options.WithOrigins(
-                "http://localhost:4200").AllowAnyMethod().AllowAnyHeader()
-            );
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
 
-            //app.UseHttpsRedirection();
-            app.UseMvc();
-        }
+			app.UseCors(
+				options => options.WithOrigins(
+					"http://localhost:4200").AllowAnyMethod().AllowAnyHeader()
+			);
 
-        public JwtSettings GetJwtSettings()
-        {
-	        JwtSettings settings = new JwtSettings
-	        {
-		        Key = Configuration["JwtSettings:key"],
-						Audience = Configuration["JwtSettings:issuer"],
-						Issuer = Configuration["JwtSettings:audience"],
-						MinutesToExpiration = Convert.ToInt32(Configuration["JwtSettings:minutesToExpiration"])
-	        };
-	        return settings;
-        }
-    }
+			//app.UseHttpsRedirection();
+			app.UseMvc();
+		}
+
+		private JwtSettings GetJwtSettings()
+		{
+			JwtSettings settings = new JwtSettings
+			{
+				Key = Configuration["JwtSettings:key"],
+				Audience = Configuration["JwtSettings:issuer"],
+				Issuer = Configuration["JwtSettings:audience"],
+				MinutesToExpiration = Convert.ToInt32(Configuration["JwtSettings:minutesToExpiration"])
+			};
+			return settings;
+		}
+	}
 }
