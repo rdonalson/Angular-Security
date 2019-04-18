@@ -54,5 +54,17 @@ namespace PtcApi
             //app.UseHttpsRedirection();
             app.UseMvc();
         }
+
+        public JwtSettings GetJwtSettings()
+        {
+	        JwtSettings settings = new JwtSettings
+	        {
+		        Key = Configuration["JwtSettings:key"],
+						Audience = Configuration["JwtSettings:issuer"],
+						Issuer = Configuration["JwtSettings:audience"],
+						MinutesToExpiration = Convert.ToInt32(Configuration["JwtSettings:minutesToExpiration"])
+	        };
+	        return settings;
+        }
     }
 }
