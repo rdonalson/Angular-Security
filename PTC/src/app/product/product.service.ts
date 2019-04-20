@@ -13,8 +13,7 @@ const httpOptions = {
 
 @Injectable()
 export class ProductService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(API_URL);

@@ -10,10 +10,11 @@ using PtcApi.Model;
 namespace PtcApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductController : BaseApiController
     {
         [HttpGet]
-				[Authorize]
+        [Authorize(Policy = "CanAccessProducts")]
         public IActionResult Get()
         {
             IActionResult ret = null;
