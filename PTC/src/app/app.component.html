@@ -11,14 +11,16 @@
     </div>
     <ul class="nav navbar-nav">
       <li>
-        <a routerLink="/products" *ngIf="securityObject.canAccessProducts"
-          >Products</a
-        >
+        <ng-container *ngIf="securityObject.isAuthenticated">
+          <a routerLink="/products"
+             *hasClaim="'canAccessProducts'">Products</a>
+        </ng-container>
       </li>
       <li>
-        <a routerLink="/categories" *ngIf="securityObject.canAccessCategories"
-          >Categories</a
-        >
+        <ng-container *ngIf="securityObject.isAuthenticated">
+          <a routerLink="/categories"
+             *hasClaim="'canAccessCategories'">Categories</a>
+        </ng-container>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">

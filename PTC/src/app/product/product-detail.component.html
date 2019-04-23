@@ -56,10 +56,10 @@
     <button
       class="btn btn-primary"
       (click)="saveData()"
-      *ngIf="securityObject.canSaveProduct"
+      *hasClaim="'canSaveProduct'"
     >
       Save
     </button>
-    <button class="btn btn-default" (click)="cancel()">Cancel</button>
+    <button class="btn btn-default" (click)="cancel()" >Cancel</button>
   </div>
 </div>

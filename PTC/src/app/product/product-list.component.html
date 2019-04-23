@@ -6,8 +6,10 @@
 
 <div class="row" *ngIf="products && products.length">
   <div class="col-xs-12">
-    <button class="btn btn-primary" (click)="addProduct()"
-      *ngIf="securityObject.canAddProduct">
+    <!-- <button class="btn btn-primary" (click)="addProduct()" *hasClaim="['canAddProduct','canAccessCategories']">
+      Add New Product
+    </button> -->
+    <button class="btn btn-primary" (click)="addProduct()" *hasClaim="'canAddProduct'">
       Add New Product
     </button>
   </div>

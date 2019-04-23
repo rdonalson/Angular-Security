@@ -17,14 +17,15 @@ import { SecurityService } from './security.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
+// export class AuthGuard implements CanActivate {
   constructor(
     private securityService: SecurityService,
     private router: Router
-  ) {}
+  ) { }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
+  ): // Observable<boolean> | Promise<boolean> | boolean {
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
@@ -32,7 +33,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     const claimType: string = next.data.claimType;
     if (
       this.securityService.securityObject.isAuthenticated &&
-      this.securityService.securityObject[claimType]
+      this.securityService.hasClaim(claimType)
     ) {
       return true;
     } else {
